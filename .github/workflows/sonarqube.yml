@@ -1,0 +1,47 @@
+name: SonarQube
+
+on:
+  push:
+    branches:
+      - main
+      - develop
+  pull_request:
+    branches:
+      - main
+      - develop
+
+jobs:
+  sonar:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Código Fuente
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup Entorno Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Instalar Poetry
+        run: pip install poetry
+
+      - name: Instalar Dependencias del Proyecto
+        run: poetry install
+
+      - name: Ejecutar Pruebas Automatizadas con Cobertura
+        run: poetry run pytest --cov=agente_ucv --cov-report=xml
+
+      - name: SonarQube Scan Analyzer
+        uses: SonarSource/sonarqube-scan-action@master
+        with:
+          args: >
+            -Dsonar.projectKey=ucv-ate-si-laboratorio08
+            -Dsonar.organization=jramosalc
+            -Dsonar.python.coverage.reportPaths=coverage.xml
+            -Dsonar.sources=agente_ucv
+            -Dsonar.tests=tests
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

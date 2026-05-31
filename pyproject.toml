@@ -1,0 +1,24 @@
+[project]
+name = "ucv-ate-si-laboratorio08"
+version = "0.1.0"
+description = "Laboratorio 08"
+readme = "README.md"
+requires-python = ">=3.11"
+
+dependencies = [
+    "google-adk>=1.0.0",
+    "python-dotenv>=1.0.0"
+]
+
+[dependency-groups]
+dev = [
+    "pytest>=8.0.0",
+    "pytest-cov>=6.0.0"
+]
+
+[tool.poetry]
+package-mode = false
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
